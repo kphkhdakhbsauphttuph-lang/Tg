@@ -1,0 +1,162 @@
+-- ==========================================
+-- คัฟเค้ก (UI Auto Translator)
+-- Version : Final Complete
+-- ==========================================
+
+local GuiService = gethui and gethui() or game:GetService("CoreGui")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+-- ==========================================
+-- 1. DICTIONARY
+-- ==========================================
+
+local dict = {
+    ["คัฟเค้ก"] = "คัฟเค้ก",
+    ["Chilli Hub"] = "คัฟเค้ก",
+
+    -- 📌 เมนูหลัก
+    ["Farm"] = "🚜 ฟาร์ม",
+    ["Player"] = "🏃 ตัวละคร",
+    ["Egg Finder"] = "🔎 ค้นหาไข่",
+    ["Predictor"] = "🔮 คาดการณ์",
+    ["Progress"] = "📈 ความคืบหน้า",
+    ["Server"] = "🌐 เซิร์ฟเวอร์",
+    ["Misc"] = "⚙️ อื่นๆ",
+    ["Webhook"] = "🔗 เว็บฮุค",
+    ["Discord"] = "💬 ดิสคอร์ด",
+    ["Quick & Keys"] = "⚡ ทางลัดและปุ่มลัด",
+    ["Settings"] = "⚙️ ตั้งค่า",
+    ["Config"] = "📁 คอนฟิก",
+    ["Search"] = "🔎 ค้นหา",
+    ["Filter features..."] = "ค้นหาเมนู...",
+
+    -- 🧪 DR SCRAMBLE
+    ["Dr Scramble Event"] = "🧪 กิจกรรม Dr. Scramble",
+    ["Auto Buy Scrambled"] = "🛒 ซื้อ Scrambled อัตโนมัติ",
+    ["Buy another Scrambled from the event shop when you run out"] = "ซื้อ Scrambled เพิ่มจากร้านกิจกรรมเมื่อของหมด",
+    ["Go To Secret Cave"] = "🕳️ ไปถ้ำลับ",
+    ["Go"] = "➡️ ไป",
+    ["Auto Open Vault"] = "🔐 เปิด Vault อัตโนมัติ",
+    ["Open the vault when all 5 parts are found"] = "เปิด Vault อัตโนมัติเมื่อพบชิ้นส่วนครบ 5 ชิ้น",
+    ["Auto Buy Scramble Shop"] = "🛒 ซื้อของร้าน Scramble อัตโนมัติ",
+    ["Buy the picked items with Samples"] = "ใช้ Samples ซื้อไอเท็มที่เลือกไว้",
+    ["Scramble Shop Items"] = "📦 ไอเท็มร้าน Scramble",
+    ["Keep Samples"] = "💾 เก็บ Samples สำรอง",
+    ["Auto Use Scrambled Mutation"] = "🧬 ใช้ Scrambled Mutation อัตโนมัติ",
+    ["Turn it on to start applying Scrambled"] = "เปิดใช้งานเพื่อเริ่มใช้ Scrambled",
+
+    -- 🤖 ล่าโดรน
+    ["Auto Hunt Drones"] = "🤖 ล่าโดรนอัตโนมัติ",
+    ["Kill drones during outbreaks for Samples and Drone Parts"] = "กำจัดโดรนระหว่าง Outbreak เพื่อรับ Samples และชิ้นส่วนโดรน",
+    ["Hunt Priority"] = "🎯 ลำดับการล่า",
+    ["Nearest"] = "📍 ใกล้ที่สุด",
+    ["Rare First"] = "💎 แรร์ก่อน",
+    ["Most HP First"] = "❤️ เลือดมากที่สุด",
+    ["Drone Types"] = "🤖 ประเภทโดรน",
+    ["Scrap Drone"] = "🗑️ โดรนเศษเหล็ก",
+    ["Reactor Drone"] = "⚡ โดรนเครื่องปฏิกรณ์",
+    ["Augmented Drone"] = "🔧 โดรนอัปเกรด",
+    ["Hunt Travel Method"] = "🚀 วิธีเดินทางไปหาโดรน",
+    ["Teleport only to drones within 150 studs, farther ones are tweened"] = "วาร์ปไปหาโดรนที่อยู่ภายใน 150 Studs ส่วนที่ไกลกว่านั้นใช้ Tween",
+    ["Hunt Tween Speed"] = "💨 ความเร็ว Tween ตอนล่า",
+    ["Only Until Vault Parts Found"] = "🎯 ล่าจนกว่าจะพบชิ้นส่วน Vault ครบ",
+    ["Auto Collect Lost Parts"] = "🧩 เก็บ Lost Parts อัตโนมัติ",
+    ["Collect the 2 Lost Parts for the vault"] = "เก็บ Lost Parts ทั้ง 2 ชิ้นสำหรับเปิด Vault",
+    ["Tween"] = "💨 Tween",
+    ["Teleport"] = "⚡ วาร์ป",
+
+    -- 🧪 LAB & MECH
+    ["Dr Scramble Lab & Mech"] = "🧪 Lab และ Mech ของ Dr. Scramble",
+    ["Auto Mech Boss"] = "🤖 ตีบอส Mech อัตโนมัติ",
+    ["Mech Tween Speed"] = "💨 ความเร็ว Tween ของ Mech",
+    ["Main Weapon Hold"] = "🔫 เวลาถืออาวุธหลัก",
+    ["Scrambler Hold"] = "🧪 เวลาถือ Scrambler",
+    ["Swap Two Weapons"] = "🔄 สลับอาวุธทั้งสองชิ้น",
+    ["Boss Server Hop"] = "🌐 เปลี่ยนเซิร์ฟหาบอส",
+    ["After each boss, hops to a less crowded server to fight again"] = "หลังจากกำจัดบอส จะเปลี่ยนไปเซิร์ฟที่คนน้อยกว่าเพื่อสู้ต่อ",
+    ["Keep Hopping For"] = "⏱️ เปลี่ยนเซิร์ฟต่อเนื่องเป็นเวลา",
+    ["Auto Claim Mastery"] = "🏆 ออโต้รับ Mastery",
+    ["Lab is locked on this account"] = "🔒 Lab ถูกล็อกในบัญชีนี้",
+    ["Lab Banners"] = "🎟️ แบนเนอร์ Lab",
+    ["Auto Lab Trade-In"] = "🔄 แลก Lab อัตโนมัติ",
+    ["Auto Reroll Lab Recipe"] = "🎲 สุ่มสูตร Lab ใหม่อัตโนมัติ",
+    ["Auto Place Lab Reward Eggs"] = "🥚 วางไข่รางวัล Lab อัตโนมัติ",
+
+    -- 🦋 BUTTERFLY BLOOM
+    ["Butterfly Bloom"] = "🦋 บุบผาผีเสื้อ",
+    ["Auto Butterfly Bloom"] = "🦋 จับผีเสื้ออัตโนมัติ",
+    ["Catch Mode"] = "🎯 โหมดจับ",
+    ["Catch Priority"] = "⭐ ลำดับการจับ",
+    ["Only for Chase mode"] = "ใช้เฉพาะโหมดไล่ล่า",
+    ["Catch Butterflies"] = "🦋 เลือกผีเสื้อที่จะจับ",
+    ["Rarest"] = "💎 หายากที่สุด",
+    ["Stand"] = "🧍 ยืนรอ",
+    ["Chase"] = "🏃 ไล่จับ",
+    ["Circle"] = "🔄 วนรอบ",
+    ["Patrol"] = "🚶 เดินตรวจ",
+
+    -- ✨ ESSENCE
+    ["Essence Min Rarity"] = "✨ ระดับความหายากขั้นต่ำของ Essence",
+    ["Only eggs of this rarity and above get the essence"] = "เฉพาะไข่ระดับนี้ขึ้นไปเท่านั้นที่จะได้รับ Essence",
+    ["Essence Min Value"] = "💰 มูลค่าขั้นต่ำของ Essence",
+    ["Skip eggs worth less than this (0 = off)"] = "ข้ามไข่ที่มีมูลค่าต่ำกว่านี้ (0 = ปิด)",
+    ["Essence Target Eggs"] = "🥚 ไข่เป้าหมายสำหรับ Essence",
+    ["Only use the essence on these eggs (empty = all)"] = "ใช้ Essence กับไข่ที่เลือกเท่านั้น (เว้นว่าง = ทั้งหมด)",
+    ["Essence Priority"] = "⭐ ลำดับการใช้ Essence",
+    ["Which egg gets the essence first"] = "เลือกไข่ที่จะได้รับ Essence ก่อน",
+    ["Essence Skip Enchanted Eggs"] = "🚫 ข้ามไข่ Enchanted",
+    ["Skip eggs that already got Enchanted, other mutations still get the essence"] = "ข้ามไข่ที่มี Enchanted แล้ว แต่ Mutation อื่นยังได้รับ Essence",
+    ["Auto Trade Up"] = "🔄 เทรดอัปอัตโนมัติ",
+    ["Trade Up Tiers"] = "📊 ระดับการเทรดอัป",
+    ["Smart Trade For Essence"] = "🧠 เทรดอัจฉริยะเพื่อ Essence",
+    ["Auto Craft Essence"] = "✨ สร้าง Essence อัตโนมัติ",
+    ["Auto Use Enchanted Essence"] = "✨ ใช้ Enchanted Essence อัตโนมัติ",
+    ["Wisp Companion"] = "👻 Wisp คู่หู",
+    ["Auto Wisp"] = "👻 Wisp อัตโนมัติ",
+
+    -- ⚔️ COMBAT
+    ["Hit Tween Speed"] = "⚔️ ความเร็ว Tween ตอนโจมตี",
+    ["Hit Max Speed"] = "💨 ความเร็วสูงสุดตอนโจมตี",
+    ["Hit Lead"] = "🎯 ระยะนำเป้า",
+    ["Stand further ahead of the target (+) or closer to them (-)"] = "ยืนห่างจากเป้ามากขึ้น (+) หรือเข้าใกล้เป้ามากขึ้น (-)",
+    ["Hit Sweep"] = "↔️ ระยะกวาด",
+    ["How far you move back and forth in front of the target"] = "ระยะที่เคลื่อนที่ไปมาอยู่ด้านหน้าเป้าหมาย",
+    ["Add/Remove Hits On Quick Bar 2"] = "➕➖ เพิ่ม/ลบปุ่มโจมตีจากแถบทางลัด 2",
+    ["Pin or unpin the hit toggles on Quick Bar 2"] = "ปักหมุดหรือยกเลิกปุ่มโจมตีบนแถบทางลัด 2",
+    ["Add"] = "➕ เพิ่ม",
+    ["Hit Status"] = "📊 สถานะการตี",
+    ["Idle"] = "💤 ว่าง",
+    ["Auto Hit Nearest Player"] = "⚔️ ออโต้ตีผู้เล่นใกล้สุด",
+    ["Auto Hit Egg Holders"] = "🥚 ออโต้ตีคนถือไข่",
+    ["Auto Hit Specific Player"] = "🎯 ออโต้ตีผู้เล่นที่เจาะจง",
+    ["Hit Player"] = "🎯 ตีผู้เล่น",
+    ["Hit Aura"] = "💫 ตี Aura",
+    ["Chase Settings"] = "🎯 ตั้งค่าการไล่",
+
+    -- 🔮 LAB PREDICTOR
+    ["Lab Predictor"] = "🔮 คาดการณ์ Lab",
+    ["Biohazard Pets"] = "☣️ สัตว์ Biohazard",
+    ["Banner chance"] = "🎟️ โอกาสได้แบนเนอร์",
+    ["Locked on this account"] = "🔒 ล็อกในบัญชีนี้",
+    ["REWARD ODDS - BIOHAZARD PETS"] = "🎁 โอกาสได้รับรางวัล • สัตว์ Biohazard",
+    ["ACTIVE"] = "🟢 กำลังทำงาน",
+    ["Ends in"] = "⏳ สิ้นสุดใน",
+    ["1 in"] = "🎲 โอกาส 1 ใน",
+    ["Chase pet"] = "🏃 สัตว์ที่ต้องไล่จับ",
+
+    -- 🔍 AUTO HOP / EGG FINDER
+    ["Auto Hop"] = "🔍 เปลี่ยนเซิร์ฟอัตโนมัติ",
+    ["Joins new servers to find eggs that match the filters below"] = "เข้าเซิร์ฟเวอร์ใหม่เพื่อค้นหาไข่ตามตัวกรองด้านล่าง",
+    ["IDLE"] = "💤 ว่าง",
+    ["Turn on Auto Hop to start hunting"] = "เปิด Auto Hop เพื่อเริ่มค้นหา",
+    ["Players"] = "👥 ผู้เล่น",
+    ["Hop Mode"] = "🌐 โหมดเปลี่ยนเซิร์ฟ",
+    ["When to move on to the next server"] = "กำหนดเวลาที่จะไปเซิร์ฟเวอร์ถัดไป",
+    ["Steal Then Hop"] = "🥚 ขโมยแล้วเปลี่ยนเซิร์ฟ",
+    ["Rarity To Wait For"] = "💎 ระดับความหายากที่รอ",
+    ["For After A Rare Spawns: this rarity or higher"] = "หลังจากมีไข่แรร์เกิด: ระดับนี้หรือสูงกว่า",
+    ["Sync With Auto Steal Filters"] = "🔄 ซิงค์กับตัวกรองออโต้ขโมย",
+    ["Changing a filter here also changes it in Auto Steal, and back"] = "เปลี่ยนตัวกรองที่นี่จะเปลี่ยนในออโต้ขโมยด้วย และกลับกัน",
+    ["Min Value To Find"] = "💰 มูลค่าขั้นต่ำที่ค้นหา",
+    ["Skip eggs worth less than this. Drag or type 250k, 50m, 15b"] = "ข้ามไข
